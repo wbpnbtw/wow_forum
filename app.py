@@ -1,8 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request
 
-
 app = Flask(__name__)
-
 
 login_pass_base = {'login': "", "pass": ""}
 
@@ -52,8 +50,12 @@ def main():
 @app.route('/create', methods=['get', 'post'])
 def create():
     render_template('create_topic.html')
+
+
 @app.route('/support')
 def support():
     render_template('support.html')
+
+
 if __name__ == '__main__':
     app.run
