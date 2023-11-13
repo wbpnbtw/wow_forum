@@ -1,59 +1,56 @@
-from flask import Flask, render_template, redirect, url_for, request
-
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
+base_login = []
+base_pass = []
 
 
-login_pass_base = {'login': "", "pass": ""}
+@app.route('/')
+def page():
+    return render_template("hello.html")
 
 
-@app.route("/")
-def hello_page():
-    return render_template('hello_page.html')
-
-
-@app.route('/user/<username>')
-def user_profile(username):
-    if username in login_pass_base:
-        return render_template('login_error.html')
-    else:
-        return "Это профиль юзера (f'username')"
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        base_login.append(username)
+        base_pass.append(password)
+        return redirect('/main')
+    return render_template('register.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
+    if request.method == "POST":
         username = request.form['username']
         password = request.form['password']
-        if username in login_pass_base['login']:
-            if password in login_pass_base['pass']:
-                return render_template("users.html")
-            else:
-                return login
-        else:
-            return login
-    else:
-        return render_template('login.html')
+        if username in base_login and password in base_pass:
+            redirect('/main')
+    render_template('login.html')
 
 
-@app.route('/reg', methods=['Get'])
-def register():
-    username = request.form['']
-    password = request.form['']
-    login_pass_base['login'] = username
-    login_pass_base['password'] = password
+@app.route('/post', methods=['POST'])
+def post():
+    username = request.form['username']
+    message = request.form['message']
+    return redirect('/main')
 
 
-@app.route('/main', methods=['get', 'post'])
+@app.route('/main', methods=["post"])
 def main():
-    render_template('main.html')
+    render_template('index.html')
 
 
-@app.route('/create', methods=['get', 'post'])
+@app.route('/topik', methods=['get', 'post'])
+def view():
+    render_template('topiks.html')
+
+
 def create():
-    render_template('create_topic.html')
-@app.route('/support')
-def support():
-    render_template('support.html')
+    render_template('create.html')
+
+
 if __name__ == '__main__':
-    app.run
+    app.run()
