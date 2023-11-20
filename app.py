@@ -32,8 +32,8 @@ def login():
         username = request.form['username']
         password = request.form['password']
         if username in base_login and password in base_pass:
-            redirect('/main')
-    render_template('login.html')
+            return redirect('/main')
+    return render_template('login.html')
 
 
 @app.route('/post', methods=['POST'])
