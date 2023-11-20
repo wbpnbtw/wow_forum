@@ -5,12 +5,6 @@ base_login = []
 base_pass = []
 alpha= ['1', '2','3', '4', '5', '6', '7', '8', '9', '0', '-', '=','[', 'p', 'o', 'i', 'u', 'y',
         't',' r', 'e', 'w', 'q', 'a', 's', 'd', 'f','g','h','j','k','l',';','z','x','c','v','b','n','m']
-@app.route('/good_pass')
-def generate_good_pass():
-    a=[]
-    for i in range (0,12):
-        a.append(random.choice(alpha))
-    return a
 
 
 @app.route('/')
@@ -25,7 +19,10 @@ def register():
         password = request.form['password']
         base_login.append(username)
         base_pass.append(password)
-        return redirect('/main')
+        a=''
+        for i in range(0, 12):
+            a=a+random.choice(alpha)
+        return render_template('register.html', variable=a)
     return render_template('register.html')
 
 
