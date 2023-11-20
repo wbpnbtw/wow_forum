@@ -45,16 +45,16 @@ def post():
 
 @app.route('/main', methods=["post"])
 def main():
-    render_template('index.html')
+    return render_template('index.html')
 
 
 @app.route('/topik', methods=['get', 'post'])
 def view():
-    render_template('topiks.html')
+    return render_template('topiks.html')
 
 
 def create():
-    render_template('create.html')
+    return render_template('create.html')
 
 
 if __name__ == '__main__':
