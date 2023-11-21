@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request, redirect
 import random
+
 app = Flask(__name__)
 base_login = []
 base_pass = []
-alpha= ['1', '2','3', '4', '5', '6', '7', '8', '9', '0', '-', '=','[', 'p', 'o', 'i', 'u', 'y',
-        't',' r', 'e', 'w', 'q', 'a', 's', 'd', 'f','g','h','j','k','l',';','z','x','c','v','b','n','m']
+post = {'user': '',
+        'head_name': '',
+        'text': ''}
+
+alpha = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '[', 'p', 'o', 'i', 'u', 'y',
+         't', ' r', 'e', 'w', 'q', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
 
 
 @app.route('/')
@@ -19,10 +24,13 @@ def register():
         password = request.form['password']
         base_login.append(username)
         base_pass.append(password)
-        a=''
-        for i in range(0, 12):
-            a=a+random.choice(alpha)
-        return render_template('register.html', variable=a)
+        a = ''
+        if len(username)<8:
+            for i in range(0, 12):
+                a = a + random.choice(alpha)
+            return render_template('register.html', variable=a)
+        else:
+            return render_template('index.html')
     return render_template('register.html')
 
 
@@ -36,13 +44,6 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/post', methods=['POST'])
-def post():
-    username = request.form['username']
-    message = request.form['message']
-    return redirect('/main')
-
-
 @app.route('/main', methods=["post"])
 def main():
     return render_template('index.html')
@@ -50,12 +51,22 @@ def main():
 
 @app.route('/topik', methods=['get', 'post'])
 def view():
-    return render_template('topiks.html')
+    if request.method == "POST":
+
+        if post['head_name'] == '' and post['text'] == '':
+            return render_template('no_post.html')
+    return render_template('topiks.html', variable=post)
 
 
+@app.route('/createtopik', methods=['get', 'post'])
 def create():
+    if request.method == "POST":
+        name = request.form['username']
+        text = request.form['password']
+        return post['user'] + name, post['text'] + text, post['user'] + base_login[0]
     return render_template('create.html')
 
 
 if __name__ == '__main__':
     app.run()
+
